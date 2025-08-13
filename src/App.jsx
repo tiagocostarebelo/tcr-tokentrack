@@ -1,7 +1,10 @@
+import tokenTrackLogo from './assets/TokenTrack.png';
+
 const App = () => {
   return (
-    <div>
-      <h1>Crypto Dash</h1>
+    <div className="header-logo">
+      <img src={tokenTrackLogo} alt="logo" className="logo"></img>
+      <h1>TokenTrack</h1>
     </div>
   )
 }
