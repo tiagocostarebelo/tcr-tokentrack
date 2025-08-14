@@ -84,7 +84,6 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
   gap: 1rem;
   flex-wrap: wrap;
 }
@@ -104,6 +103,13 @@ a {
   align-items: center;
   justify-content: end;
   gap: 0.75rem;
+}
+
+@media screen and (max-width: 460px) {
+  .controls {
+    flex-direction: column;
+    align-items: start;
+  }
 }
 
 .controls label {
