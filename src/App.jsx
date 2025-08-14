@@ -1,17 +1,21 @@
 import tokenTrackLogo from './assets/tokentrack.png';
 import { useState, useEffect } from 'react';
 import CoinCard from './components/CoinCard';
-const API_URL = 'https://cors-anywhere.herokuapp.com/https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false';
+import LimitSelector from './components/LimitSelector';
+import CurrencySelector from './components/CurrencySelector';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const App = () => {
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currency, setCurrency] = useState("eur");
+  const [limit, setLimit] = useState(10);
 
   useEffect(() => {
     const fetchCoins = async () => {
       try {
-        const res = await fetch(API_URL);
+        const res = await fetch(`${API_URL}?vs_currency=${currency}&order=market_cap_desc&per_page=${limit}&page=1&sparkline=false`);
         if(!res.ok) throw new Error('Failed to fetch data');
         const data = await res.json();
         console.log(data);
@@ -26,7 +30,7 @@ const App = () => {
     }
 
     fetchCoins();
-  }, [])
+  }, [limit, currency])
 
   return (
     <div>
@@ -34,12 +38,16 @@ const App = () => {
         <img src={tokenTrackLogo} alt="logo" className="logo"></img>
         <h1>TokenTrack</h1>              
       </div>
+      <div className="controls">
+        <CurrencySelector currency={currency} onCurrencyChange={setCurrency} />
+        <LimitSelector limit={limit} onLimitChange={setLimit}/>
+      </div>
       { loading && <p>Loading...</p>}
       { error && <div className="error"> {error}</div> } 
       { !loading && !error && (
         <main className="grid">
           {coins.map((coin) => (
-            <CoinCard coin={coin} key={coin.id}/>
+            <CoinCard coin={coin} currency={currency} key={coin.id}/>
           ))}
         </main>
       )}
