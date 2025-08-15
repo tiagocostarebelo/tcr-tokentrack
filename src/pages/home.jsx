@@ -3,14 +3,15 @@ import LimitSelector from '../components/LimitSelector';
 import CurrencySelector from '../components/CurrencySelector';
 import SortSelector from '../components/SortSelector';
 import FilterInput from '../components/FilterInput';
+import Spinner from '../components/Spinner';
 
 const HomePage = ({ coins, filter, setFilter, limit, setLimit, currency, setCurrency, sortBy, setSortBy, loading, error }) => {
-    const filteredCoins = coins.filter((coin) => {
-        return coin.name.toLowerCase().includes(filter.toLowerCase()) || coin.symbol.toLowerCase().includes(filter.toLowerCase())
-    })
+  const filteredCoins = coins.filter((coin) => {
+    return coin.name.toLowerCase().includes(filter.toLowerCase()) || coin.symbol.toLowerCase().includes(filter.toLowerCase())
+  })
     .slice()
     .sort((a, b) => {
-      switch(sortBy) {
+      switch (sortBy) {
         case 'market_cap_desc':
           return b.market_cap - a.market_cap;
         case 'market_cap_asc':
@@ -27,27 +28,27 @@ const HomePage = ({ coins, filter, setFilter, limit, setLimit, currency, setCurr
     });
 
 
-    return (
-        <div>            
-            <div className="top-controls">
-                <FilterInput filter={filter} onFilterChange={setFilter}/>        
-            </div>
-            <div className="controls">
-                <CurrencySelector currency={currency} onCurrencyChange={setCurrency} />
-                <SortSelector sortBy={sortBy} onSortChange={setSortBy}/>
-                <LimitSelector limit={limit} onLimitChange={setLimit}/>
-            </div>
-            { loading && <p>Loading...</p>}
-            { error && <div className="error"> {error}</div> } 
-            { !loading && !error && (
-                <main className="grid">
-                {filteredCoins.length > 0 ? filteredCoins.map((coin) => (
-                    <CoinCard coin={coin} currency={currency} key={coin.id}/>
-                )) : <p>No matching coins</p>}
-                </main>
-            )}
-        </div>
-    );
+  return (
+    <div>
+      <div className="top-controls">
+        <FilterInput filter={filter} onFilterChange={setFilter} />
+      </div>
+      <div className="controls">
+        <CurrencySelector currency={currency} onCurrencyChange={setCurrency} />
+        <SortSelector sortBy={sortBy} onSortChange={setSortBy} />
+        <LimitSelector limit={limit} onLimitChange={setLimit} />
+      </div>
+      {loading && <Spinner color='white' />}
+      {error && <div className="error"> {error}</div>}
+      {!loading && !error && (
+        <main className="grid">
+          {filteredCoins.length > 0 ? filteredCoins.map((coin) => (
+            <CoinCard coin={coin} currency={currency} key={coin.id} />
+          )) : <p>No matching coins</p>}
+        </main>
+      )}
+    </div>
+  );
 };
 
 export default HomePage;
