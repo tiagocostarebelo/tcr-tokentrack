@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import HomePage from './pages/home';
 import AboutPage from './pages/about';
-import { Routes, Route } from 'react-router'; 
+import CoinDetailsPage from './pages/coin-details';
+import NotFoundPage from './pages/not-found';
+import { Routes, Route } from 'react-router';
 const API_URL = import.meta.env.VITE_API_URL;
 
 const App = () => {
@@ -18,48 +20,44 @@ const App = () => {
     const fetchCoins = async () => {
       try {
         const res = await fetch(`${API_URL}?vs_currency=${currency}&order=${sortBy}&per_page=${limit}&page=1&sparkline=false`);
-        if(!res.ok) throw new Error('Failed to fetch data');
+        if (!res.ok) throw new Error('Failed to fetch data');
         const data = await res.json();
         setCoins(data);
       }
-      catch(err) {
+      catch (err) {
         setError(err.message);
       }
-      finally{
+      finally {
         setLoading(false);
       }
     }
     fetchCoins();
-  }, [limit, currency]);  
+  }, [limit, currency]);
 
   return (
     <>
       <Header />
       <Routes>
-        <Route 
-          path="/" 
-          element={ 
-              <HomePage 
-                coins={coins}
-                filter={filter}
-                setFilter={setFilter}
-                limit={limit}
-                setLimit={setLimit}
-                currency={currency}
-                setCurrency={setCurrency}
-                sortBy={sortBy}
-                setSortBy={setSortBy}
-                loading={loading}
-                error={error}
-              /> 
-            }/>
-          <Route 
-            path="/about"
-            element={
-              <AboutPage/>
-            }
+        <Route path="/" element={
+          <HomePage
+            coins={coins}
+            filter={filter}
+            setFilter={setFilter}
+            limit={limit}
+            setLimit={setLimit}
+            currency={currency}
+            setCurrency={setCurrency}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            loading={loading}
+            error={error}
           />
-      </Routes>    
+        }
+        />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/coin/:id" element={<CoinDetailsPage currency={currency} />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
     </>
   )
 }
