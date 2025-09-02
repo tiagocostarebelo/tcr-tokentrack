@@ -33,10 +33,14 @@ const HomePage = ({ coins, filter, setFilter, limit, setLimit, currency, setCurr
       <div className="top-controls">
         <FilterInput filter={filter} onFilterChange={setFilter} />
       </div>
+     
       <div className="controls">
         <CurrencySelector currency={currency} onCurrencyChange={setCurrency} />
         <SortSelector sortBy={sortBy} onSortChange={setSortBy} />
         <LimitSelector limit={limit} onLimitChange={setLimit} />
+        <div className="attribution">
+          <p> Powered by <a href="https://www.coingecko.com/en/api" target="_blank">CoinGecko API</a></p>
+        </div>
       </div>
       {loading && <Spinner color='white' />}
       {error && <div className="error"> {error}</div>}
@@ -48,6 +52,7 @@ const HomePage = ({ coins, filter, setFilter, limit, setLimit, currency, setCurr
         </main>
       )}
     </div>
+    
   );
 };
 
